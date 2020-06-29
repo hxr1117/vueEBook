@@ -1,16 +1,16 @@
 const book = {
   state: {
-    test: 1
+    fileName: ''
   },
   mutations: {
-    setTest: (state, newTest) => {
-      state.test = newTest
+    setFileName: (state, fileName) => {
+      state.fileName = fileName
     }
   },
   actions: {
-    setTest: ({ commit, state }, newTest) => {
+    setFileName: ({ commit }, fileName) => {
       // 返回promise对象
-      return commit('setTest', newTest)
+      return commit('setFileName', fileName)
     }
   },
   modules: {}
