@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import book from './modules/book'
 import getters from './getters'
+import actions from './actions'
 
 Vue.use(Vuex)
 
@@ -12,5 +13,10 @@ export default new Vuex.Store({
   modules: {
     book
   },
-  getters
+  getters,
+  actions
 })
+
+// 使用actions直接设定getter里面的数据
+// this.$store.dispatch('setMenuVisible', false)避免使用这样长的代码来修改值
+// this.setMenuVisible(false)来代替上面语句

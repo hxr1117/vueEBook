@@ -5,40 +5,67 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 global.ePub = Epub
 export default {
-  computed: {
-    ...mapGetters(['fileName'])
-  },
+  // 组件复用
+  // 把mixins中的组件和这里的进行混合
+  mixins: [ebookMixin],
   methods: {
+    prePage() {
+      if (this.rendition) {
+        this.rendition.prev()
+        this.hideTitleAndMenu()
+      }
+    },
+    nextPage() {
+      if (this.rendition) {
+        this.rendition.next()
+        this.hideTitleAndMenu()
+      }
+    },
+    toggleTitleAndMenu() {
+      // this.$store.dispatch('setMenuVisible', !this.menuVisible)
+      this.setMenuVisible(!this.menuVisible)
+    },
+    hideTitleAndMenu() {
+      // this.$store.dispatch('setMenuVisible', false)
+      this.setMenuVisible(false)
+    },
     initEpub() {
-      const url = 'http://192.168.31.126:8081/epub/' + this.fileName + '.epub'
+      const url = '/api/' + this.fileName + '.epub'
       this.book = new Epub(url)
-      console.log(this.book)
       this.rendition = this.book.renderTo('read', {
         width: innerWidth,
         height: innerHeight,
         method: 'defalut'
       })
       this.rendition.display()
-      this.rendition.on('touchstart', (event) => {
-        console.log(event)
+      // 动态绑定事件
+      this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX
         this.touchStartTime = event.timeStamp
       })
-      this.rendition.on('touchend', (event) => {
+      this.rendition.on('touchend', event => {
         const offsetX = event.changedTouches[0].clientX - this.touchStartX
         const time = event.timeStamp - this.touchStartTime
-        console.log(offsetX, time)
+        if (time < 500 && offsetX > 40) {
+          this.prePage()
+        } else if (time < 500 && offsetX < -40) {
+          this.nextPage()
+        } else {
+          this.toggleTitleAndMenu()
+        }
+        event.preventDefault()
+        event.stopPropagation()
       })
     }
   },
   mounted() {
     // Statistics|2013_Book_ShipAndOffshoreStructureDesign
     const fileName = this.$route.params.fileName.split('|').join('/')
-    this.$store.dispatch('setFileName', fileName).then(() => {
+    this.setFileName(fileName).then(() => {
       this.initEpub()
     })
   }
