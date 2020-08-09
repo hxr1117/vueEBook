@@ -1,3 +1,5 @@
+import { getReadTime } from '../utils/localStorage'
+
 // 存储静态数据
 export const FONT_SIZE_LIST = [
   { fontSize: 12 },
@@ -88,4 +90,20 @@ export function removeAllCss(href) {
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_gold.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
+}
+
+export function getReadTimeByMinute(filName) {
+  const readTime = getReadTime(filName)
+  if (!readTime) {
+    return 0
+  } else {
+    return Math.ceil(readTime / 60)
+  }
+}
+
+// 展开多级列表
+export function flatten(array) {
+  return [].concat(
+    ...array.map(item => [].concat(item, ...flatten(item.subitems)))
+  )
 }

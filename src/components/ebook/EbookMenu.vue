@@ -18,11 +18,13 @@
         <div class="icon-wrapper">
           <span class="icon-A icon" @click="showSetting(0)"></span>
         </div>
-        <ebook-setting-font></ebook-setting-font>
-        <ebook-setting-font-popup></ebook-setting-font-popup>
-        <ebook-setting-theme></ebook-setting-theme>
       </div>
     </transition>
+    <ebook-setting-font></ebook-setting-font>
+    <ebook-setting-font-popup></ebook-setting-font-popup>
+    <ebook-setting-theme></ebook-setting-theme>
+    <ebook-setting-progress></ebook-setting-progress>
+    <ebook-slide></ebook-slide>
   </div>
 </template>
 
@@ -30,13 +32,17 @@
 import EbookSettingTheme from './EbookSettingTheme'
 import EbookSettingFontPopup from './EbookSettingFontPopup'
 import EbookSettingFont from './EbookSettingFont'
+import EbookSettingProgress from './EbookSettingProgress'
+import EbookSlide from './EbookSlide'
 import { ebookMixin } from '../../utils/mixin'
 export default {
   mixins: [ebookMixin],
   components: {
     EbookSettingFont,
     EbookSettingFontPopup,
-    EbookSettingTheme
+    EbookSettingTheme,
+    EbookSettingProgress,
+    EbookSlide
   },
   methods: {
     showSetting(key) {

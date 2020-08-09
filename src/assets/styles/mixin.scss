@@ -3,17 +3,37 @@ $ratio: 375 / 10;
 // 1rem = fontSize px
 // 1px = (1 / fontSize) rem
 @function px2rem($px) {
-    @return $px / $ratio + rem;
+  @return $px / $ratio + rem;
 }
 
 @mixin center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @mixin left {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin ellipsis {
+  // 太长省略
+  text-overflow: ellipsis;
+  overflow: hidden;
+  // 不换行
+  white-space: nowrap;
+}
+
+// 按line行隐藏
+@mixin  ellipsis2($line) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // 根据单词换行
+  word-break: keep-all;
 }
