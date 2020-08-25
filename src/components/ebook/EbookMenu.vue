@@ -59,7 +59,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 101;
+  z-index: 200;
   height: px2rem(100);
   background-color: white;
   display: flex;

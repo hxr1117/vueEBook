@@ -1,6 +1,9 @@
 <template>
   <div class="ebook-reader">
     <div id="read"></div>
+    <div class="ebook-reader-mask" @click="onMaskClick"
+    @touchmove="move"
+    @touchend="moveEnd"></div>
   </div>
 </template>
 
@@ -24,6 +27,36 @@ export default {
   // 把mixins中的组件和这里的进行混合
   mixins: [ebookMixin],
   methods: {
+    move(e) {
+      let offsetY = 0
+      if (this.firstOffsetY) {
+        offsetY = e.changedTouches[0].clientY - this.firstOffsetY
+        this.setOffsetY(offsetY)
+      } else {
+        this.firstOffsetY = e.changedTouches[0].clientY
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    moveEnd(e) {
+      // console.log('moveEnd', e)
+      // 归位
+      this.setOffsetY(0)
+      this.firstOffsetY = null
+    },
+    // 点击蒙板
+    onMaskClick(e) {
+      const offsetX = e.offsetX
+      // console.log(offsetX)
+      const width = window.innerWidth
+      if (offsetX > 0 && offsetX < width * 0.3) {
+        this.prePage()
+      } else if (offsetX > 0 && offsetX > width * 0.7) {
+        this.nextPage()
+      } else {
+        this.toggleTitleAndMenu()
+      }
+    },
     prePage() {
       if (this.rendition) {
         this.rendition.prev().then(() => {
@@ -136,6 +169,7 @@ export default {
         event.preventDefault()
         event.stopPropagation()
       })
+      this.rendition.on('touchmoved', event => {})
     },
     parseBook() {
       this.book.loaded.cover.then(cover => {
@@ -195,4 +229,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/styles/global';
+.ebook-reader {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .ebook-reader-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+    z-index: 150;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

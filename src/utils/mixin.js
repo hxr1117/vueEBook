@@ -5,7 +5,7 @@ import {
   removeAllCss,
   getReadTimeByMinute
 } from '../utils/book'
-import { saveLocation } from '../utils/localStorage'
+import { saveLocation, getBookmark } from '../utils/localStorage'
 
 export const ebookMixin = {
   computed: {
@@ -86,6 +86,17 @@ export const ebookMixin = {
         // 保存进度到本地
         const startCfi = currentLocation.start.cfi
         saveLocation(this.fileName, startCfi)
+        const bookmark = getBookmark(this.fileName)
+        console.log(bookmark)
+        if (bookmark) {
+          if (bookmark.some(item => item.cfi === startCfi)) {
+            this.setIsBookmark(true)
+          } else {
+            this.setIsBookmark(false)
+          }
+        } else {
+          this.setIsBookmark(false)
+        }
       }
     },
     display(target, cb) {
