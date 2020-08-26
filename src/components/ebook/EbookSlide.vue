@@ -8,6 +8,7 @@
         <div class="content" v-if="settingVisible === 3">
           <div class="content-page-wrapper" v-if="bookAvailable">
             <div class="content-page">
+              <!--动态组件，防止反复渲染-->
               <component
                 :is="currentTab === 1 ? content : bookmark"
               ></component>

@@ -13,6 +13,9 @@
 </template>
 
 <script>
+// 书签重点：
+// 通过绝对定位作出下拉的效果，
+// 通过filter删除书签
 import { realPx } from '../../utils/utils'
 import { ebookMixin } from '../../utils/mixin'
 import Bookmark from '../common/BookMark'

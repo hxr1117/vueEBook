@@ -3,7 +3,10 @@
     <div id="read"></div>
     <div class="ebook-reader-mask" @click="onMaskClick"
     @touchmove="move"
-    @touchend="moveEnd"></div>
+    @touchend="moveEnd"
+    @mousedown.left="onMouseEnter"
+    @mousemove.left="onMouseMove"
+    @mouseup.left="onMouseEnd"></div>
   </div>
 </template>
 
@@ -27,6 +30,48 @@ export default {
   // 把mixins中的组件和这里的进行混合
   mixins: [ebookMixin],
   methods: {
+    // 1-鼠标进入
+    // 2-鼠标进入后的移动
+    // 3-鼠标从移动状态移出（松手
+    // 4-鼠标还原
+    onMouseEnter(e) {
+      this.mouseState = 1
+      this.mouseStarTime = e.timeStamp
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    onMouseMove(e) {
+      if (this.mouseState === 1) {
+        this.mouseState = 2
+      } else if (this.mouseState === 2) {
+        let offsetY = 0
+        if (this.firstOffsetY) {
+          offsetY = e.clientY - this.firstOffsetY
+          this.setOffsetY(offsetY)
+        } else {
+          this.firstOffsetY = e.clientY
+        }
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    onMouseEnd(e) {
+      if (this.mouseState === 2) {
+        this.setOffsetY(0)
+        this.firstOffsetY = null
+        this.mouseState = 3
+      } else {
+        this.mouseState = 4
+      }
+      // 因为轻微的移动（用户只是想点击）会导致菜单栏无法响应，
+      // 所以要对时间进行判断，时间很短就会认为是点击
+      const time = e.timeStamp - this.mouseStarTime
+      if (time < 200) {
+        this.mouseState = 4
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
     move(e) {
       let offsetY = 0
       if (this.firstOffsetY) {
@@ -46,6 +91,9 @@ export default {
     },
     // 点击蒙板
     onMaskClick(e) {
+      if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
+        return
+      }
       const offsetX = e.offsetX
       // console.log(offsetX)
       const width = window.innerWidth

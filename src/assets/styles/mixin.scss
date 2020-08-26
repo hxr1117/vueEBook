@@ -18,6 +18,12 @@ $ratio: 375 / 10;
   align-items: center;
 }
 
+@mixin right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 @mixin ellipsis {
   // 太长省略
   text-overflow: ellipsis;

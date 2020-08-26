@@ -27,8 +27,14 @@
         <img :src="cover" alt="" class="slide-contents-book-img" />
       </div>
       <div class="slide-contents-book-info-wrapper">
-        <div class="slide-contents-book-title">{{ metadata.title }}</div>
-        <div class="slide-contents-book-author">{{ metadata.creator }}</div>
+        <div class="slide-contents-book-title">
+          <span class="slide-contents-book-title-text">{{ metadata.title }}</span>
+        </div>
+        <div class="slide-contents-book-author">
+          <span class="slide-contents-book-author-text">
+            {{ metadata.creator }}
+          </span>
+        </div>
       </div>
       <div class="slide-contents-book-progress-wrapper">
         <div class="slide-contents-book-progress">
@@ -206,17 +212,25 @@ export default {
         // 375 * 0.85 = 318.75 - 30 = 288.75 - 10 * 2 = 268.75 - 45 - 70
         font-size: px2rem(20);
         // 为什么我这里的尺寸总是不一样
-        width: px2rem(400);
+        /*width: px2rem(400);*/
         line-height: px2rem(22);
         // 文字的缩略要制定外层组件的宽度
         // @include ellipsis;
-        // 两行显示
-        @include ellipsis2(2);
+        @include left;
+        .slide-contents-book-title-text {
+          // 两行显示
+          @include ellipsis2(2);
+        }
       }
       .slide-contents-book-author {
         font-size: px2rem(18);
-        @include ellipsis;
+        //@include ellipsis;
         margin-top: px2rem(10);
+        line-height: px2rem(20);
+        @include left;
+        .slide-contents-book-author-text {
+          @include ellipsis2(1);
+        }
       }
     }
     .slide-contents-book-progress-wrapper {

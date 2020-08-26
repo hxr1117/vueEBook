@@ -32,6 +32,20 @@ export const ebookMixin = {
     ]),
     themeList() {
       return themeList(this)
+    },
+    getSectionName() {
+      // 无法定位二级目录
+      // if (this.section) {
+      //   const sectionInfo = this.currentBook.section(this.section)
+      //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
+      //     // 获取章节名称
+      //     return this.currentBook.navigation.get(sectionInfo.href).label
+      //     // console.log(this.currentBook.navigation.get(sectionInfo.href))
+      //   }
+      // }
+      // return ''
+      // 因为现在的目录就是一个数组，所以直接从数组里读取section位置
+      return this.section ? this.navigation[this.section].label : ''
     }
   },
   methods: {
